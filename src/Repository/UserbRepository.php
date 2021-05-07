@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Clientb;
 use App\Entity\Userb;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -34,6 +35,48 @@ class UserbRepository extends ServiceEntityRepository implements PasswordUpgrade
         $user->setPassword($newEncodedPassword);
         $this->_em->persist($user);
         $this->_em->flush();
+    }
+
+    /**
+     * @param Clientb $clientb
+     * @return array
+     */
+    public function findByCustomer(Clientb $clientb): array
+    {
+
+        $query = $this->createQueryBuilder('u')
+            ->where('u.clientb = :clientb')
+            ->setParameter('clientb', $clientb)
+            ->getQuery()
+            ->getResult();
+
+        if (is_array($query) and $query[0] instanceof Userb) {
+            return $query;
+        }
+        return [];
+//        throw new EntityNotFoundException("Liste des utilisateurs introuvable !");
+    }
+
+    /**
+     * @param Clientb $clientb
+     * @param $id
+     * @return array
+     */
+    public function findByCustomerAndUser(Clientb $clientb, $id): array
+    {
+        $query = $this->createQueryBuilder('u')
+            ->where('u.clientb = :clientb AND u.id = :id')
+            ->setParameter('clientb', $clientb)
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
+
+        if (is_array($query) and count($query) !== 0 and $query[0] instanceof Userb) {
+            return $query;
+        }
+        return [];
+
+//        throw new EntityNotFoundException("Utilisateur introuvable !");
     }
 
     // /**
