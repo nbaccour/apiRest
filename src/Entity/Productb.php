@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductbRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ProductbRepository::class)
@@ -19,22 +20,26 @@ class Productb
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("product:read")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("product:read")
      */
     private $description;
 
 
     /**
      * @ORM\Column(type="float")
+     * @Groups("product:read")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups("product:read")
      */
     private $brand;
 
