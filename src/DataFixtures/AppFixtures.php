@@ -84,6 +84,9 @@ class AppFixtures extends Fixture
 
         $aDataClient = [
             [
+                'BILEMO',
+            ],
+            [
                 'SFR',
             ],
             [
@@ -105,16 +108,31 @@ class AppFixtures extends Fixture
         }
 
         foreach ($aClients as $oClient) {
-            for ($u = 0; $u < 10; $u++) {
+
+            if ($oClient->getName() === 'BILEMO') {
                 $user = new Userb();
                 $hash = $this->encoder->encodePassword($user, "password");
-                $user->setEmail('user' . $u . '@' . strtolower($oClient->getName()) . '.com')
-                    ->setUsername($faker->firstName())
+                $user->setEmail('admin@' . strtolower($oClient->getName()) . '.com')
+                    ->setUsername('admin')
+                    ->setRoles(['ROLE_ADMIN'])
                     ->setClientb($oClient)
                     ->setPassword($hash);
 
                 $manager->persist($user);
+            } else {
+                for ($u = 0; $u < 10; $u++) {
+                    $user = new Userb();
+                    $hash = $this->encoder->encodePassword($user, "password");
+                    $user->setEmail('user' . $u . '@' . strtolower($oClient->getName()) . '.com')
+                        ->setUsername($faker->firstName())
+                        ->setClientb($oClient)
+                        ->setPassword($hash);
+
+                    $manager->persist($user);
+                }
             }
+
+
         }
 
         $manager->flush();

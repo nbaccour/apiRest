@@ -50,6 +50,7 @@ class Userb implements UserInterface
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Le mot de passe est obligatoire")
+     * @Groups("user:read")
      */
     private $password;
 
@@ -90,7 +91,7 @@ class Userb implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
