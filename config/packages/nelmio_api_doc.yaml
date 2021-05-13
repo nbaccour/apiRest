@@ -1,0 +1,7 @@
+# config/packages/nelmio_api_doc.yaml
+nelmio_api_doc:
+  areas:
+    path_patterns: # an array of regexps
+    - ^/api(?!/doc$)
+    host_patterns:
+    - ^api\.

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProductbRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProductbRepository::class)
@@ -21,12 +22,14 @@ class Productb
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("product:read")
+     * @Assert\NotBlank(message="Le nom du produit est obligatoire")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("product:read")
+     * @Assert\NotBlank(message="La description est obligatoire")
      */
     private $description;
 
@@ -34,12 +37,14 @@ class Productb
     /**
      * @ORM\Column(type="float")
      * @Groups("product:read")
+     * @Assert\NotBlank(message="Le prix est obligatoire")
      */
     private $price;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("product:read")
+     * @Assert\NotBlank(message="La marque est obligatoire")
      */
     private $brand;
 

@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Productb;
 use App\Repository\ProductbRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductbController extends AbstractController
 {
@@ -60,6 +63,48 @@ class ProductbController extends AbstractController
         $response = $this->json($product, 200, [], []);
 
         return $response;
+
+    }
+
+    /**
+     * @Route("/api/products/{id}", name="product_update", methods={"PUT"})
+     */
+    public function update(
+        $id,
+        Request $request,
+        EntityManagerInterface $manager,
+        ProductbRepository $productbRepository,
+        SerializerInterface $serializer,
+        ValidatorInterface $validator
+    ) {
+//        $product = new Productb();
+        $productExist = $productbRepository->find($id);
+        if (!$productExist) {
+            $data = [
+                'status' => 404,
+                'errors' => "Produit non trouvé",
+            ];
+            return $this->json($data, 404);
+        }
+
+        $json = $request->getContent();
+        $product = $serializer->deserialize($json, Productb::class, 'json');
+
+        $errors = $validator->validate($product);
+        if (count($errors) > 0) {
+            return $this->json($errors, 400);
+        }
+
+        $productExist->setName($product->getName())
+            ->setDescription($product->getDescription())
+            ->setPrice($product->getPrice())
+            ->setBrand($product->getBrand());
+        $manager->flush();
+
+        $response = $this->json($productExist, 200, [], []);
+
+        return $response;
+
 
     }
 }
