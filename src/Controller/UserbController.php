@@ -54,6 +54,7 @@ class UserbController extends AbstractController
     /**
      * @OA\Get(
      *     path="/api/{name}/users",
+     *     tags={"Users"},
      *     @OA\Parameter(
      *       name="name",
      *       in="path",
@@ -65,6 +66,10 @@ class UserbController extends AbstractController
      *          response="200",
      *          description="liste des utilisateurs",
      *          @OA\JsonContent(type="array",@OA\Items(ref="#/components/schemas/Users")),
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
      *      )
      *)
      * @Route("/api/{name}/users", name="user_index", methods={"GET"})
@@ -104,6 +109,8 @@ class UserbController extends AbstractController
     /**
      * @OA\Get(
      *     path="/api/{name}/users/{id}",
+     *     tags={"Users"},
+     *     @OA\Parameter(ref="#/components/parameters/id"),
      *     @OA\Parameter(
      *       name="name",
      *       in="path",
@@ -111,17 +118,14 @@ class UserbController extends AbstractController
      *       required=true,
      *       @OA\Schema(type="string")
      *      ),
-     *     @OA\Parameter(
-     *       name="id",
-     *       in="path",
-     *       description="ID de la resource",
-     *       required=true,
-     *       @OA\Schema(type="integer")
-     *      ),
      *     @OA\Response(
      *          response="200",
      *          description="detail d'un utilisateur",
      *          @OA\JsonContent(ref="#/components/schemas/UserDetail"),
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
      *      )
      *)
      * @Route("/api/{name}/users/{id}", name="user_detail", methods={"GET"})
@@ -155,6 +159,37 @@ class UserbController extends AbstractController
 
 
     /**
+     * @OA\Post(
+     *     path="/api/{name}/user",
+     *     tags={"Users"},
+     *     security={"bearer"},
+     *     @OA\RequestBody(
+     *          request="AddUser",
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"email","password","username"},
+     *              @OA\Property(type="string", property="email"),
+     *              @OA\Property(type="string", property="password"),
+     *              @OA\Property(type="string", property="username"),
+     *           )
+     *      ),
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path",
+     *       description="le nom d'un client",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *      ),
+     *     @OA\Response(
+     *          response="201",
+     *          description="utilisateur ajouté",
+     *          @OA\JsonContent(ref="#/components/schemas/UserDetail"),
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
+     *      )
+     *)
      * @Route("/api/{name}/user", name="user_add", methods={"POST"})
      */
     public function add(Request $request, ValidatorInterface $validator, $name)
@@ -208,6 +243,28 @@ class UserbController extends AbstractController
     }
 
     /**
+     * @OA\Delete(
+     *     path="/api/users/{id}",
+     *     tags={"Users"},
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     security={"bearer"},
+     *     @OA\RequestBody(
+     *          request="DeleteUser",
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"id"},
+     *              @OA\Property(type="boolean", property="id"),
+     *           )
+     *      ),
+     *     @OA\Response(
+     *          response="204",
+     *          description="utilisateur supprimé",
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
+     *      )
+     *)
      * @Route("/api/users/{id}", name="user_delete", methods={"DELETE"})
      */
     public function delete($id)
