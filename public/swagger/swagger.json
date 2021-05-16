@@ -1,0 +1,116 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API BileMo",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://127.0.0.1:8000/api",
+            "description": "Projet openclassrooms : API REST"
+        }
+    ],
+    "paths": {
+        "/api/{name}/users": {
+            "get": {
+                "operationId": "App\\Controller\\UserbController::index",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "le nom d'un client",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "liste des utilisateurs",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Users"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/{name}/users/{id}": {
+            "get": {
+                "operationId": "App\\Controller\\UserbController::detail",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "le nom d'un client",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la resource",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "detail d'un utilisateur",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserDetail"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Users": {
+                "description": "list des utilisateurs",
+                "properties": {
+                    "id": {
+                        "type": "integer"
+                    },
+                    "email": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "password": {
+                        "type": "string",
+                        "nullable": false
+                    },
+                    "username": {
+                        "type": "string",
+                        "nullable": false
+                    }
+                },
+                "type": "object"
+            },
+            "UserDetail": {
+                "description": "detail d'un utilisateur",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Users"
+                    }
+                ]
+            }
+        }
+    }
+}

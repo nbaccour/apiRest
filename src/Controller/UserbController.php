@@ -16,8 +16,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-//use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
+use OpenApi\Annotations as OA;
 
 
 class UserbController extends AbstractController
@@ -53,7 +52,21 @@ class UserbController extends AbstractController
 
 
     /**
-     *
+     * @OA\Get(
+     *     path="/api/{name}/users",
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path",
+     *       description="le nom d'un client",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *      ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="liste des utilisateurs",
+     *          @OA\JsonContent(type="array",@OA\Items(ref="#/components/schemas/Users")),
+     *      )
+     *)
      * @Route("/api/{name}/users", name="user_index", methods={"GET"})
      *
      */
@@ -89,6 +102,28 @@ class UserbController extends AbstractController
     }
 
     /**
+     * @OA\Get(
+     *     path="/api/{name}/users/{id}",
+     *     @OA\Parameter(
+     *       name="name",
+     *       in="path",
+     *       description="le nom d'un client",
+     *       required=true,
+     *       @OA\Schema(type="string")
+     *      ),
+     *     @OA\Parameter(
+     *       name="id",
+     *       in="path",
+     *       description="ID de la resource",
+     *       required=true,
+     *       @OA\Schema(type="integer")
+     *      ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="detail d'un utilisateur",
+     *          @OA\JsonContent(ref="#/components/schemas/UserDetail"),
+     *      )
+     *)
      * @Route("/api/{name}/users/{id}", name="user_detail", methods={"GET"})
      */
     public function detail($name, $id)
