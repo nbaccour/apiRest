@@ -35,7 +35,7 @@ Pour interagir avec l'API, vous devez installer Postman :
 # Informations sur l'API
 
 - L'obtention du token afin de s'authentifier à l'API se fait via l'envoie des identifiants sur l'URL : `https://127.0.0.1:8000/api/login`
-- via Postman dans le body indiquez le code ci-dessous : 
+- via Postman dans le body indiquez ce code : 
 `
 {
     "username":"admin@bilemo.com",
