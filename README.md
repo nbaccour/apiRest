@@ -21,27 +21,28 @@ API BileMo
 
 # Installation de Postman
 
-Pour interagir avec l'API, vous devez installer Postman
-url : https://www.postman.com/
+Pour interagir avec l'API, vous devez installer Postman : 
+`https://www.postman.com/`
 
 # Génération des cles
 - création du répertoire jwt :
-mkdir config/jwt
+`mkdir config/jwt`
 - création d'une clé privée :
-openssl genrsa -out config/jwt/private.pem -aes256 4896
+`openssl genrsa -out config/jwt/private.pem -aes256 4896`
 - création d'une clé public :
-openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+`openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem`
 
 # Informations sur l'API
 
-L'obtention du token afin de s'authentifier à l'API se fait via l'envoie des identifiants sur l'URL https://127.0.0.1:8000/api/login
-via Postman dans le body indiquez le code ci-dessous
+- L'obtention du token afin de s'authentifier à l'API se fait via l'envoie des identifiants sur l'URL : `https://127.0.0.1:8000/api/login`
+- via Postman dans le body indiquez le code ci-dessous : 
+`
 {
     "username":"admin@bilemo.com",
     "password":"password"
 }
-
+`
 
 # Lien Documentation en locale
 
-https://127.0.0.1:8000/swagger/index.html
+- `https://127.0.0.1:8000/swagger/index.html`
