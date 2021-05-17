@@ -24,7 +24,7 @@ API BileMo
 Pour interagir avec l'API, vous devez installer Postman : 
 `https://www.postman.com/`
 
-# Génération des cles
+# Informations sur la génération des cles
 - création du répertoire jwt :
 `mkdir config/jwt`
 - création d'une clé privée :
