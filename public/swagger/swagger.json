@@ -34,7 +34,12 @@
                     "404": {
                         "$ref": "#/components/responses/NotFound"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "scalar": "bearer"
+                    }
+                ]
             }
         },
         "/api/products/{id}": {
@@ -62,7 +67,12 @@
                     "404": {
                         "$ref": "#/components/responses/NotFound"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "scalar": "bearer"
+                    }
+                ]
             },
             "put": {
                 "tags": [
@@ -161,7 +171,12 @@
                     "404": {
                         "$ref": "#/components/responses/NotFound"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "scalar": "bearer"
+                    }
+                ]
             }
         },
         "/api/{name}/users/{id}": {
@@ -198,7 +213,12 @@
                     "404": {
                         "$ref": "#/components/responses/NotFound"
                     }
-                }
+                },
+                "security": [
+                    {
+                        "scalar": "bearer"
+                    }
+                ]
             }
         },
         "/api/{name}/user": {
@@ -268,6 +288,57 @@
             }
         },
         "/api/users/{id}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "operationId": "App\\Controller\\UserbController::update",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/id"
+                    }
+                ],
+                "requestBody": {
+                    "request": "UpdateUser",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password",
+                                    "username"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "username": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "mise à jour d'utilisateur"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFound"
+                    }
+                },
+                "security": [
+                    {
+                        "scalar": "bearer"
+                    }
+                ]
+            },
             "delete": {
                 "tags": [
                     "Users"

@@ -30,6 +30,7 @@ class UserbController extends AbstractController
     protected $manager;
     protected $serializer;
     protected $paginator;
+    protected $validator;
 
     public function __construct(
 
@@ -39,7 +40,8 @@ class UserbController extends AbstractController
         ClientbRepository $clientbRepository,
         UserbRepository $userbRepository,
         EntityManagerInterface $manager,
-        PaginatorInterface $paginator
+        PaginatorInterface $paginator,
+        ValidatorInterface $validator
     ) {
         $this->encoder = $encoder;
         $this->authorizationChecker = $authorizationChecker;
@@ -48,6 +50,7 @@ class UserbController extends AbstractController
         $this->manager = $manager;
         $this->serializer = $serializer;
         $this->paginator = $paginator;
+        $this->validator = $validator;
     }
 
 
@@ -55,6 +58,7 @@ class UserbController extends AbstractController
      * @OA\Get(
      *     path="/api/{name}/users",
      *     tags={"Users"},
+     *     security={"bearer"},
      *     @OA\Parameter(
      *       name="name",
      *       in="path",
@@ -110,6 +114,7 @@ class UserbController extends AbstractController
      * @OA\Get(
      *     path="/api/{name}/users/{id}",
      *     tags={"Users"},
+     *     security={"bearer"},
      *     @OA\Parameter(ref="#/components/parameters/id"),
      *     @OA\Parameter(
      *       name="name",
@@ -284,6 +289,65 @@ class UserbController extends AbstractController
         $response = $this->json('', 204, [], []);
 
         return $response;
+
+    }
+
+    /**
+     * @OA\Put(
+     *     path="/api/users/{id}",
+     *     tags={"Users"},
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     security={"bearer"},
+     *     @OA\RequestBody(
+     *          request="UpdateUser",
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"email","password","username"},
+     *              @OA\Property(type="string", property="email"),
+     *              @OA\Property(type="string", property="password"),
+     *              @OA\Property(type="string", property="username"),
+     *           )
+     *      ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="mise à jour d'utilisateur",
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
+     *      )
+     *)
+     * @Route("/api/users/{id}", name="user_update", methods={"PUT"})
+     */
+    public function update($id, Request $request)
+    {
+        $userExist = $this->userbRepository->find($id);
+        if (!$userExist) {
+            $data = [
+                'status' => 404,
+                'errors' => "Utilisateur non trouvé",
+            ];
+            return $this->json($data, 404);
+        }
+
+        $json = $request->getContent();
+        $user = $this->serializer->deserialize($json, Userb::class, 'json');
+
+        $errors = $this->validator->validate($user);
+        if (count($errors) > 0) {
+            return $this->json($errors, 400);
+        }
+        $hash = $this->encoder->encodePassword($user, $user->getPassword());
+        $userExist->setEmail($user->getEmail())
+            ->setUsername($user->getUsername())
+            ->setPassword($hash);
+
+        $this->manager->flush();
+
+        $response = $this->json($userExist, 200, [], ["groups" => "user:read"]);
+
+        return $response;
+
 
     }
 }

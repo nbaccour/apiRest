@@ -21,6 +21,7 @@ class ProductbController extends AbstractController
      * @OA\Get(
      *     path="/api/products",
      *     tags={"Products"},
+     *     security={"bearer"},
      *     @OA\Response(
      *          response="200",
      *          description="liste des produits",
@@ -64,6 +65,7 @@ class ProductbController extends AbstractController
      * @OA\Get(
      *     path="/api/products/{id}",
      *     tags={"Products"},
+     *     security={"bearer"},
      *     @OA\Parameter(ref="#/components/parameters/id"),
      *     @OA\Response(
      *          response="200",
