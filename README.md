@@ -19,11 +19,28 @@ API BileMo
 6. Jouez les fixtures : `php bin/console d:f:l --no-interaction`
 7. Lancez le server : `symfony serve` ou `php -S localhost:8000 -t public`
 
-
 # Installation de Postman
 
 Pour interagir avec l'API, vous devez installer Postman
 url : https://www.postman.com/
+
+# Génération des cles
+- création du répertoire jwt
+mkdir config/jwt
+- création d'une clé privée
+openssl genrsa -out config/jwt/private.pem -aes256 4896
+- création d'une clé public
+openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+
+# Informations sur l'API
+
+L'obtention du token afin de s'authentifier à l'API se fait via l'envoie des identifiants sur l'URL https://127.0.0.1:8000/api/login
+via Postman dans le body indiquez le code ci-dessous
+{
+    "username":"admin@bilemo.com",
+    "password":"password"
+}
+
 
 # Lien Documentation en locale
 
