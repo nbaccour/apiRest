@@ -25,11 +25,11 @@ Pour interagir avec l'API, vous devez installer Postman
 url : https://www.postman.com/
 
 # Génération des cles
-- création du répertoire jwt
+- création du répertoire jwt :
 mkdir config/jwt
-- création d'une clé privée
+- création d'une clé privée :
 openssl genrsa -out config/jwt/private.pem -aes256 4896
-- création d'une clé public
+- création d'une clé public :
 openssl rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
 
 # Informations sur l'API
