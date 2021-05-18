@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use OpenApi\Annotations as OA;
 
 use OpenApi\Annotations as OA;
 
@@ -50,11 +51,9 @@ class ProductbController extends AbstractController
             return $this->json($data, 404);
         }
 
-//        $productNormalizer = $normalizer->normalize($products);
 
         $productslist = $paginator->paginate($products, $request->query->getInt('page', 1), 3);
         $response = $this->json($productslist, 200, [], []);
-//        $response = $this->json($productslist, 200, [], ['groups' => 'product:read']);
 
 
         return $response;
@@ -134,7 +133,6 @@ class ProductbController extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator
     ) {
-//        $product = new Productb();
         $productExist = $productbRepository->find($id);
         if (!$productExist) {
             $data = [
