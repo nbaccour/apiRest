@@ -28,6 +28,7 @@ class Userb implements UserInterface
     }
 
     /**
+     * @var int
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -36,6 +37,7 @@ class Userb implements UserInterface
     private $id;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups("user:read")
      */
@@ -47,6 +49,7 @@ class Userb implements UserInterface
     private $roles = [];
 
     /**
+     * @var string
      * @var string The hashed password
      * @ORM\Column(type="string")
      * @Assert\NotBlank(message="Le mot de passe est obligatoire")
@@ -55,6 +58,7 @@ class Userb implements UserInterface
     private $password;
 
     /**
+     * @var string
      * @ORM\Column(type="string", length=255)
      * @Groups("user:read")
      * @Assert\NotBlank(message="Le username est obligatoire")
@@ -91,7 +95,7 @@ class Userb implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->email;
+        return (string)$this->username;
     }
 
     /**

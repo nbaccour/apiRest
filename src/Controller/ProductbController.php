@@ -13,10 +13,27 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use OpenApi\Annotations as OA;
+
+use OpenApi\Annotations as OA;
 
 class ProductbController extends AbstractController
 {
     /**
+     * @OA\Get(
+     *     path="/api/products",
+     *     tags={"Products"},
+     *     security={"bearer"},
+     *     @OA\Response(
+     *          response="200",
+     *          description="liste des produits",
+     *          @OA\JsonContent(type="array",@OA\Items(ref="#/components/schemas/Products")),
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
+     *      )
+     *)
      * @Route("/api/products", name="product_index", methods={"GET"})
      */
     public function index(
@@ -34,11 +51,9 @@ class ProductbController extends AbstractController
             return $this->json($data, 404);
         }
 
-//        $productNormalizer = $normalizer->normalize($products);
 
         $productslist = $paginator->paginate($products, $request->query->getInt('page', 1), 3);
         $response = $this->json($productslist, 200, [], []);
-//        $response = $this->json($productslist, 200, [], ['groups' => 'product:read']);
 
 
         return $response;
@@ -47,6 +62,21 @@ class ProductbController extends AbstractController
 
 
     /**
+     * @OA\Get(
+     *     path="/api/products/{id}",
+     *     tags={"Products"},
+     *     security={"bearer"},
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     @OA\Response(
+     *          response="200",
+     *          description="detail d'un produit",
+     *          @OA\JsonContent(ref="#/components/schemas/ProductDetail"),
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
+     *      )
+     *)
      * @Route("/api/products/{id}", name="product_detail", methods={"GET"})
      */
     public function detail(ProductbRepository $repository, $id)
@@ -67,6 +97,32 @@ class ProductbController extends AbstractController
     }
 
     /**
+     * @OA\Put(
+     *     path="/api/products/{id}",
+     *     tags={"Products"},
+     *     @OA\Parameter(ref="#/components/parameters/id"),
+     *     security={"bearer"},
+     *     @OA\RequestBody(
+     *          request="UpdateProduct",
+     *          required=true,
+     *          @OA\JsonContent(
+     *              required={"name","description","brand","price"},
+     *              @OA\Property(type="string", property="name"),
+     *              @OA\Property(type="string", property="description"),
+     *              @OA\Property(type="string", property="brand"),
+     *              @OA\Property(type="integer", property="price"),
+     *           )
+     *      ),
+     *     @OA\Response(
+     *          response="200",
+     *          description="produit mis à jour",
+     *          @OA\JsonContent(ref="#/components/schemas/ProductDetail"),
+     *      ),
+     *      @OA\Response(
+     *          response="404",
+     *          ref="#/components/responses/NotFound"),
+     *      )
+     *)
      * @Route("/api/products/{id}", name="product_update", methods={"PUT"})
      */
     public function update(
@@ -77,7 +133,6 @@ class ProductbController extends AbstractController
         SerializerInterface $serializer,
         ValidatorInterface $validator
     ) {
-//        $product = new Productb();
         $productExist = $productbRepository->find($id);
         if (!$productExist) {
             $data = [
