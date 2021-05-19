@@ -16,8 +16,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-//use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+
+//use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 
 class UserbController extends AbstractController
@@ -53,7 +54,6 @@ class UserbController extends AbstractController
 
 
     /**
-     *
      * @Route("/api/{name}/users", name="user_index", methods={"GET"})
      *
      */
